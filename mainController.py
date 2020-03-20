@@ -29,7 +29,7 @@ while(1):
     if isUpToDate==1 : break
     # Taking Infomation
     studentSecretCode = sheet.sheets[0].at(row=currRow, col=secretCodeCol).strip().upper()
-    studentName = students.get(studentSecretCode, studentSecretCode)
+    studentName = students.get(studentSecretCode, "___"+studentSecretCode+"___")
     problemName = sheet.sheets[0].at(row=currRow, col=problemCodeCol)
     code = sheet.sheets[0].at(row=currRow, col=codeCol)
     
