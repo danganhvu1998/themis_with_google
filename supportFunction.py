@@ -57,3 +57,77 @@ def markDone(sheet, row):
     body=body
   ).execute()
   print('{0} cells updated.'.format(result.get('updatedCells')))
+
+def updateScore(sheet, student, problem, score):
+  SHEET_OUTPUT_ID = Config.infomationTaker("SHEET_OUTPUT_ID")
+  SHEET_OUTPUT_NAME = Config.infomationTaker("SHEET_OUTPUT_NAME")
+
+  # GET ROW
+  FIRST_COL_RANGE_NAME = SHEET_OUTPUT_NAME+"!A:A"
+  result = sheet.values().get(spreadsheetId=SHEET_OUTPUT_ID, range=FIRST_COL_RANGE_NAME).execute()
+  values = result.get('values', [])
+  found = 0
+  if len(values)==0:
+    writeRow = 2
+  else:
+    writeRow = 2
+    for value in values:
+      if len(value)==0: continue
+      if(value[0].strip().upper() == student): 
+        found = 1
+        break
+      writeRow+=1
+  # REWRITE
+  body = {
+    'values': [[student]]
+  }
+  if found == 0:
+    RANGE_NAME = "{}!A{}:A{}".format(SHEET_OUTPUT_NAME, writeRow, writeRow)
+    result = sheet.values().update(
+      spreadsheetId=SHEET_OUTPUT_ID,
+      range=RANGE_NAME,
+      valueInputOption="USER_ENTERED", 
+      body=body
+    ).execute()
+
+  # GET COL
+  FIRST_ROW_RANGE_NAME = SHEET_OUTPUT_NAME+"!1:1"
+  result = sheet.values().get(spreadsheetId=SHEET_OUTPUT_ID, range=FIRST_ROW_RANGE_NAME).execute()
+  values = result.get('values', [])
+  found = 0
+  if len(values)==0:
+    writeCol = 2
+  else:
+    writeCol = 2
+    for value in values[0]:
+      if len(value)==0: continue
+      if(value.strip().upper() == problem): 
+        found = 1
+        break
+      writeCol+=1
+  writeCol = chr(writeCol-1+ord('A'))
+  # REWRITE
+  body = {
+    'values': [[problem]]
+  }
+  if found == 0:
+    RANGE_NAME = "{}!{}1:{}1".format(SHEET_OUTPUT_NAME, writeCol, writeCol)
+    result = sheet.values().update(
+      spreadsheetId=SHEET_OUTPUT_ID,
+      range=RANGE_NAME,
+      valueInputOption="USER_ENTERED", 
+      body=body
+    ).execute()
+  
+  # WRITE SCORE
+  body = {
+    'values': [[score]]
+  }
+  RANGE_NAME = "{}!{}{}:{}{}".format(SHEET_OUTPUT_NAME, writeCol, writeRow, writeCol, writeRow)
+  result = sheet.values().update(
+    spreadsheetId=SHEET_OUTPUT_ID,
+    range=RANGE_NAME,
+    valueInputOption="USER_ENTERED", 
+    body=body
+  ).execute()
+  print("{} - {} - {}{}, score is {}".format(student, problem, writeCol, writeRow, score))
