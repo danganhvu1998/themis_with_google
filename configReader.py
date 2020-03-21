@@ -11,6 +11,11 @@ def configReader():
   result[ "students" ] = students
   return result
 
+def infomationTaker(key):
+  configFile = open(".env.json").read()
+  config = json.loads(configFile)
+  return config[ key ]
+
 ##########################################
 ## DEBUG ##
 ##########################################
