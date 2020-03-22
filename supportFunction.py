@@ -126,7 +126,7 @@ def updateScore(sheet, student, problem, score):
     currScore = result.get('values', [])[0][0]
   except:
     currScore = 0
-  score = max(currScore, score)
+  score = max(int(currScore), score)
   body = {
     'values': [[score]]
   }
