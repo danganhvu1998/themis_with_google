@@ -23,6 +23,12 @@ RELOAD_AFTER_SEC = CONFIG[ "RELOAD_AFTER_SEC" ]
 # The ID and range of a sample spreadsheet.
 SHEET_OUTPUT_ID = CONFIG[ 'SHEET_OUTPUT_ID' ]
 
+# Config logs folder
+FILE_OUT_AT = CONFIG[ "FILE_OUT_AT" ] #"FILE_OUT_AT": "./contestants/",
+LOG_FOLDER_AT = FILE_OUT_AT + CONFIG[ "LOG_FOLDER_AT" ] #"LOG_FOLDER_AT": "Logs/",
+
+
+
 def main():
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
@@ -49,7 +55,7 @@ def main():
     sheet = service.spreadsheets()
 
     while(1):
-        paths = sorted(Path("Logs").iterdir(), key=os.path.getmtime)
+        paths = sorted(Path(LOG_FOLDER_AT).iterdir(), key=os.path.getmtime)
         for path in paths:
             fp = open(path, "r");
             firstLine = fp.readline().strip()
