@@ -55,9 +55,11 @@ def main():
     sheet = service.spreadsheets()
 
     while(1):
-        paths = sorted(Path(LOG_FOLDER_AT).iterdir(), key=os.path.getmtime)
+        paths = sorted(Path("./contestants/Logs/").iterdir(), key=os.path.getmtime)
         for path in paths:
-            fp = open(path, "r");
+            path = str(path)
+            if not path.endswith(".log"): continue
+            fp = open(path, "r", encoding="utf8");
             firstLine = fp.readline().strip()
             fp.close()
             info = re.findall("[.a-zA-Z0-9]+", firstLine)
@@ -68,8 +70,8 @@ def main():
             except:
                 score = 0
             SFunc.updateScore(sheet, studentName, problemCode, score)
-            time.sleep(3)
-            os.remove(path)
+            time.sleep(4)
+            os.rename(path, path+".done")
 
 if __name__ == '__main__':
     main()
