@@ -120,10 +120,16 @@ def updateScore(sheet, student, problem, score):
     ).execute()
   
   # WRITE SCORE
+  RANGE_NAME = "{}!{}{}:{}{}".format(SHEET_OUTPUT_NAME, writeCol, writeRow, writeCol, writeRow)
+  try:
+    result = sheet.values().get(spreadsheetId=SHEET_OUTPUT_ID, range=RANGE_NAME).execute()
+    currScore = result.get('values', [])[0][0]
+  except:
+    currScore = 0
+  score = max(currScore, score)
   body = {
     'values': [[score]]
   }
-  RANGE_NAME = "{}!{}{}:{}{}".format(SHEET_OUTPUT_NAME, writeCol, writeRow, writeCol, writeRow)
   result = sheet.values().update(
     spreadsheetId=SHEET_OUTPUT_ID,
     range=RANGE_NAME,
