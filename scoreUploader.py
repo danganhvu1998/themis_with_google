@@ -55,7 +55,11 @@ def main():
     sheet = service.spreadsheets()
 
     while(1):
-        paths = sorted(Path("./contestants/Logs/").iterdir(), key=os.path.getmtime)
+        try:
+            paths = sorted(Path("./contestants/Logs/").iterdir(), key=os.path.getmtime)
+        except:
+            time.sleep(10)
+            continue
         for path in paths:
             path = str(path)
             if not path.endswith(".log"): continue
