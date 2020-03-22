@@ -18,6 +18,7 @@
   + ```SHEET_INPUT_NAME```: chứa tên của sheet lưu câu trả lời của học sinh
   + ```SHEET_OUTPUT_ID```: chứa ID của sheet thể hiện bảng điểm
   + ```SHEET_OUTPUT_NAME```: chứa tên của sheet lưu thể hiện bảng điểm
++ ```students.json```: Chứ mã bí mật nào ứng với mã học sinh. Mã học sinh không nên viết tiếng việt, hay có dấu cách.
 
 ## Chạy
 
