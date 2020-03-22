@@ -53,7 +53,7 @@ def markDone(sheet, row):
   result = sheet.values().update(
     spreadsheetId=SHEET_INPUT_ID,
     range=RANGE_NAME,
-    valueInputOption="USER_ENTERED", 
+    valueInputOption="RAW", 
     body=body
   ).execute()
   print('{0} cells updated.'.format(result.get('updatedCells')))
@@ -86,7 +86,7 @@ def updateScore(sheet, student, problem, score):
     result = sheet.values().update(
       spreadsheetId=SHEET_OUTPUT_ID,
       range=RANGE_NAME,
-      valueInputOption="USER_ENTERED", 
+      valueInputOption="RAW", 
       body=body
     ).execute()
 
@@ -115,7 +115,7 @@ def updateScore(sheet, student, problem, score):
     result = sheet.values().update(
       spreadsheetId=SHEET_OUTPUT_ID,
       range=RANGE_NAME,
-      valueInputOption="USER_ENTERED", 
+      valueInputOption="RAW", 
       body=body
     ).execute()
   
@@ -127,7 +127,7 @@ def updateScore(sheet, student, problem, score):
   result = sheet.values().update(
     spreadsheetId=SHEET_OUTPUT_ID,
     range=RANGE_NAME,
-    valueInputOption="USER_ENTERED", 
+    valueInputOption="RAW", 
     body=body
   ).execute()
   print("{} - {} - {}{}, score is {}".format(student, problem, writeCol, writeRow, score))
