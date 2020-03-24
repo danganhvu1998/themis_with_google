@@ -53,8 +53,9 @@ def main():
 
     # Call the Sheets API
     sheet = service.spreadsheets()
-    # for i in range(10):
-    #     print( SFunc.getRow(sheet, i+1) )
+
+    
+
     currRow = START_ROW
     while( 1 ):
         print("Cheking Row:", currRow)

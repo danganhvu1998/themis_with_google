@@ -22,6 +22,10 @@ RELOAD_AFTER_SEC = CONFIG[ "RELOAD_AFTER_SEC" ]
 
 # The ID and range of a sample spreadsheet.
 SHEET_OUTPUT_ID = CONFIG[ 'SHEET_OUTPUT_ID' ]
+SHEET_OUTPUT_NAME = CONFIG[ 'SHEET_OUTPUT_NAME' ]
+
+# CONTEST MODE
+CONTEST_MODE = CONFIG[ "CONTEST_MODE" ]
 
 # Config logs folder
 FILE_OUT_AT = CONFIG[ "FILE_OUT_AT" ] #"FILE_OUT_AT": "./contestants/",
@@ -54,6 +58,20 @@ def main():
     # Call the Sheets API
     sheet = service.spreadsheets()
 
+    # Write Col
+    if(CONTEST_MODE == "ACM"):
+        RANGE_NAME = SHEET_OUTPUT_NAME+"!A1:B1"
+        body = {'values': [["Contestant", "Penalty"]]}
+    else:
+        RANGE_NAME = SHEET_OUTPUT_NAME+"!A1:A1"
+        body = {'values': [["Contestant"]]}
+    sheet.values().update(
+        spreadsheetId=SHEET_OUTPUT_ID,
+        range=RANGE_NAME,
+        valueInputOption="RAW", 
+        body=body
+    ).execute()
+
     while(1):
         try:
             paths = sorted(Path("./contestants/Logs/").iterdir(), key=os.path.getmtime)
@@ -69,11 +87,12 @@ def main():
             info = re.findall("[.a-zA-Z0-9]+", firstLine)
             studentName = info[0].strip().upper()
             problemCode = info[1].strip().upper()
+            submitTime = int(re.findall("[0-9]+", path)[0])
             try:
                 score = float(info[2])
             except:
                 score = 0
-            SFunc.updateScore(sheet, studentName, problemCode, score)
+            SFunc.updateScore(sheet, studentName, problemCode, score, submitTime)
             time.sleep(4)
             os.rename(path, path+".done")
 

@@ -71,16 +71,14 @@ def getRangeName(sheet, student, problem):
   result = sheet.values().get(spreadsheetId=SHEET_OUTPUT_ID, range=FIRST_COL_RANGE_NAME).execute()
   values = result.get('values', [])
   found = 0
-  if len(values)==0:
-    writeRow = 2
-  else:
-    writeRow = 2
-    for value in values:
-      if len(value)==0: continue
-      if(value[0].strip().upper() == student): 
-        found = 1
-        break
-      writeRow+=1
+  writeRow = 1
+  for value in values:
+    if(value[0].strip().upper() == student): 
+      found = 1
+      break
+    writeRow+=1
+  if found == 0:
+    writeRow = len(values) + 1
   # REWRITE
   body = {
     'values': [[student]]
@@ -99,16 +97,14 @@ def getRangeName(sheet, student, problem):
   result = sheet.values().get(spreadsheetId=SHEET_OUTPUT_ID, range=FIRST_ROW_RANGE_NAME).execute()
   values = result.get('values', [])
   found = 0
-  if len(values)==0:
-    writeCol = 2
-  else:
-    writeCol = 2
-    for value in values[0]:
-      if len(value)==0: continue
-      if(value.strip().upper() == problem): 
-        found = 1
-        break
-      writeCol+=1
+  writeCol = 1
+  for value in values[0]:
+    if(value.strip().upper() == problem): 
+      found = 1
+      break
+    writeCol+=1
+  if found==0:
+    writeCol = len( values[0] ) + 1
   writeCol = chr(writeCol-1+ord('A'))
   # REWRITE
   body = {
@@ -127,7 +123,7 @@ def getRangeName(sheet, student, problem):
   RANGE_NAME = "{}!{}{}:{}{}".format(SHEET_OUTPUT_NAME, writeCol, writeRow, writeCol, writeRow)
   return RANGE_NAME
 
-def updateScore(sheet, student, problem, score):
+def updateScore(sheet, student, problem, score, submitTime):
   SHEET_OUTPUT_ID = Config.infomationTaker("SHEET_OUTPUT_ID")
   RANGE_NAME = getRangeName(sheet, student, problem)
   try:
@@ -145,4 +141,4 @@ def updateScore(sheet, student, problem, score):
     valueInputOption="RAW", 
     body=body
   ).execute()
-  print("{} - {} - {}{}, score is {}".format(student, problem, writeCol, writeRow, score))
+  print("{} - {} - {}, score is {} at timestamp {}".format(student, problem, RANGE_NAME, score, submitTime))
