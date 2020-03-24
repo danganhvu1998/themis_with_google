@@ -65,10 +65,12 @@ def main():
             time.sleep(RELOAD_AFTER_SEC)
             print("Updating ...")
             continue
-        if rowValues[0] != 'X':
-            if SFunc.writeToFile(rowValues, currRow): # Write Successful 
-                print("    -> Writed to file")
-                SFunc.markDone(sheet, currRow)
+        if not rowValues[0].isdigit():
+            timestamp = SFunc.writeToFile(rowValues, rowValues[0])
+            if timestamp: # Write Successful 
+
+                print("    -> Writed to file", timestamp)
+                SFunc.markDone(sheet, timestamp, currRow)
         else:
             print("    -> Updated")
         currRow+=1

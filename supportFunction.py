@@ -6,6 +6,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 import configReader as Config
 import os
+import time
 
 def getRow(sheet, row):
   SHEET_INPUT_ID = Config.infomationTaker("SHEET_INPUT_ID")
@@ -15,7 +16,7 @@ def getRow(sheet, row):
   values = result.get('values', [])
   return values
 
-def writeToFile(rowValue, id):
+def writeToFile(rowValue, dateAndTime):
   # DATA
   DATA = Config.configReader()
   STUDENTS = DATA[ "students" ]
@@ -30,25 +31,28 @@ def writeToFile(rowValue, id):
   # FOLDER URL
   FILE_OUT_AT = CONFIG[ "FILE_OUT_AT" ]
   if not os.path.exists(FILE_OUT_AT): os.makedirs(FILE_OUT_AT)
+  
 
   # PRINT
+  timestamp = time.mktime(time.strptime(dateAndTime, '%m/%d/%Y %H:%M:%S'))
+  timestamp = int(timestamp)
   studentName = STUDENTS.get(rowValue[SECRET_CODE_COL], "__"+rowValue[SECRET_CODE_COL]+"__")
   problemName = rowValue[PROBLEM_CODE_COL]
-  fileName = "{}{}[{}][{}].{}".format(FILE_OUT_AT, id, studentName, problemName, FILE_TYPE)
+  fileName = "{}{}[{}][{}].{}".format(FILE_OUT_AT, timestamp, studentName, problemName, FILE_TYPE)
   code = rowValue[ CODE_COL ]
   fp = open(fileName, "w")
   fp.write( code )
   fp.close()
   print("Write file id:", id)
-  return 1
+  return timestamp
 
-def markDone(sheet, row):
+def markDone(sheet, dateAndTime, row):
   SHEET_INPUT_ID = Config.infomationTaker("SHEET_INPUT_ID")
   SHEET_INPUT_NAME = Config.infomationTaker("SHEET_INPUT_NAME")
   RANGE_NAME = SHEET_INPUT_NAME+"!A"+str(row)+":A"+str(row)
   print(RANGE_NAME)
   body = {
-    'values': [["X"]]
+    'values': [[dateAndTime]]
   }
   result = sheet.values().update(
     spreadsheetId=SHEET_INPUT_ID,
@@ -58,7 +62,7 @@ def markDone(sheet, row):
   ).execute()
   print('{0} cells updated.'.format(result.get('updatedCells')))
 
-def updateScore(sheet, student, problem, score):
+def getRangeName(sheet, student, problem):
   SHEET_OUTPUT_ID = Config.infomationTaker("SHEET_OUTPUT_ID")
   SHEET_OUTPUT_NAME = Config.infomationTaker("SHEET_OUTPUT_NAME")
 
@@ -119,8 +123,13 @@ def updateScore(sheet, student, problem, score):
       body=body
     ).execute()
   
-  # WRITE SCORE
+  # Get RANGE_NAME
   RANGE_NAME = "{}!{}{}:{}{}".format(SHEET_OUTPUT_NAME, writeCol, writeRow, writeCol, writeRow)
+  return RANGE_NAME
+
+def updateScore(sheet, student, problem, score):
+  SHEET_OUTPUT_ID = Config.infomationTaker("SHEET_OUTPUT_ID")
+  RANGE_NAME = getRangeName(sheet, student, problem)
   try:
     result = sheet.values().get(spreadsheetId=SHEET_OUTPUT_ID, range=RANGE_NAME).execute()
     currScore = result.get('values', [])[0][0]
