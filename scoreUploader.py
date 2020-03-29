@@ -84,7 +84,7 @@ def main():
             fp = open(path, "r", encoding="utf8");
             firstLine = fp.readline().strip()
             fp.close()
-            info = re.findall("[.a-zA-Z0-9]+", firstLine)
+            info = re.findall("[.a-zA-Z0-9_]+", firstLine)
             studentName = info[0].strip().upper()
             problemCode = info[1].strip().upper()
             submitTime = int(re.findall("[0-9]+", path)[0])
@@ -94,7 +94,9 @@ def main():
                 score = 0
             SFunc.updateScore(sheet, studentName, problemCode, score, submitTime)
             time.sleep(4)
-            os.rename(path, path+".done")
+            if not CONFIG["IS_DEV_MODE"]:
+                os.rename(path, path+".done")
+        if CONFIG["IS_DEV_MODE"]: break
 
 if __name__ == '__main__':
     main()

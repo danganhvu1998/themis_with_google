@@ -123,15 +123,47 @@ def getRangeName(sheet, student, problem):
   RANGE_NAME = "{}!{}{}:{}{}".format(SHEET_OUTPUT_NAME, writeCol, writeRow, writeCol, writeRow)
   return RANGE_NAME
 
-def updateScore(sheet, student, problem, score, submitTime):
+def updatePenalty(sheet, RANGE_NAME, score, submitTime):
   SHEET_OUTPUT_ID = Config.infomationTaker("SHEET_OUTPUT_ID")
-  RANGE_NAME = getRangeName(sheet, student, problem)
+  WRONG_SUBMISSION_PENALTY = Config.infomationTaker("WRONG_SUBMISSION_PENALTY")
+  START_TIMESTAMP = Config.infomationTaker("START_TIMESTAMP")
   try:
     result = sheet.values().get(spreadsheetId=SHEET_OUTPUT_ID, range=RANGE_NAME).execute()
-    currScore = result.get('values', [])[0][0]
+    currPenalty = float(result.get('values', [])[0][0])
+  except:
+    currPenalty = 0
+  currPenalty += (score-1)*WRONG_SUBMISSION_PENALTY + int((submitTime-START_TIMESTAMP)/60)
+  body = {
+    'values': [[currPenalty]]
+  }
+  result = sheet.values().update(
+    spreadsheetId=SHEET_OUTPUT_ID,
+    range=RANGE_NAME,
+    valueInputOption="RAW", 
+    body=body
+  ).execute()
+  print("RANGE_NAME: {} - Score: {} - Penalty: {}".format(RANGE_NAME, score, currPenalty))
+
+def updateScore(sheet, student, problem, score, submitTime):
+  SHEET_OUTPUT_ID = Config.infomationTaker("SHEET_OUTPUT_ID")
+  CONTEST_MODE = Config.infomationTaker("CONTEST_MODE")
+  RANGE_NAME = getRangeName(sheet, student, problem)
+  isUpdatePenaltyNeeded = 0
+  try:
+    result = sheet.values().get(spreadsheetId=SHEET_OUTPUT_ID, range=RANGE_NAME).execute()
+    currScore = float(result.get('values', [])[0][0])
   except:
     currScore = 0
-  score = max(float(currScore), score)
+  if CONTEST_MODE == "ACM":
+    if currScore <= 0:
+      currScore -= 1
+      if score == 10: 
+        score = -currScore
+        isUpdatePenaltyNeeded = 1
+      else: score = currScore
+    else: score = currScore
+  else:
+    score = max(currScore, score)
   body = {
     'values': [[score]]
   }
@@ -141,4 +173,7 @@ def updateScore(sheet, student, problem, score, submitTime):
     valueInputOption="RAW", 
     body=body
   ).execute()
+  if isUpdatePenaltyNeeded:
+    RANGE_NAME_PENALTY = getRangeName(sheet, student, "PENALTY")
+    updatePenalty(sheet, RANGE_NAME_PENALTY, score, submitTime)
   print("{} - {} - {}, score is {} at timestamp {}".format(student, problem, RANGE_NAME, score, submitTime))
