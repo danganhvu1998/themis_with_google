@@ -53,8 +53,9 @@ def main():
 
     # Call the Sheets API
     sheet = service.spreadsheets()
-    # for i in range(10):
-    #     print( SFunc.getRow(sheet, i+1) )
+
+    
+
     currRow = START_ROW
     while( 1 ):
         print("Cheking Row:", currRow)
@@ -65,10 +66,12 @@ def main():
             time.sleep(RELOAD_AFTER_SEC)
             print("Updating ...")
             continue
-        if rowValues[0] != 'X':
-            if SFunc.writeToFile(rowValues, currRow): # Write Successful 
-                print("    -> Writed to file")
-                SFunc.markDone(sheet, currRow)
+        if not rowValues[0].isdigit():
+            timestamp = SFunc.writeToFile(rowValues, rowValues[0])
+            if timestamp: # Write Successful 
+
+                print("    -> Writed to file", timestamp)
+                SFunc.markDone(sheet, timestamp, currRow)
         else:
             print("    -> Updated")
         currRow+=1
