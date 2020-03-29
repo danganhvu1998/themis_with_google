@@ -99,4 +99,6 @@ def main():
         if CONFIG["IS_DEV_MODE"]: break
 
 if __name__ == '__main__':
-    main()
+    why(1):
+        try: main()
+        except: time.sleep(50)

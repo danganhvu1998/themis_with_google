@@ -77,4 +77,6 @@ def main():
         currRow+=1
 
 if __name__ == '__main__':
-    main()
+    why(1):
+        try: main()
+        except: time.sleep(50)
