@@ -96,8 +96,8 @@ def main(credentialsFile, tokenFile):
                 score = 0
             SFunc.updateScore(sheet, studentName, problemCode, score, submitTime)
             time.sleep(4)
-            # if not CONFIG["IS_DEV_MODE"]:
-                # os.rename(path, path+".done")
+            if not CONFIG["IS_DEV_MODE"]:
+                os.rename(path, path+".done")
             print("     Done Loading", path)
         if CONFIG["IS_DEV_MODE"]: break
     time.sleep(5)
