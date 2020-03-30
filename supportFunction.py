@@ -142,7 +142,7 @@ def updatePenalty(sheet, RANGE_NAME, score, submitTime):
     valueInputOption="RAW", 
     body=body
   ).execute()
-  print("RANGE_NAME: {} - Score: {} - Penalty: {}".format(RANGE_NAME, score, currPenalty))
+  print("          RANGE_NAME: {} - Score: {} - Penalty: {}".format(RANGE_NAME, score, currPenalty))
 
 def updateScore(sheet, student, problem, score, submitTime):
   SHEET_OUTPUT_ID = Config.infomationTaker("SHEET_OUTPUT_ID")
@@ -176,4 +176,4 @@ def updateScore(sheet, student, problem, score, submitTime):
   if isUpdatePenaltyNeeded:
     RANGE_NAME_PENALTY = getRangeName(sheet, student, "PENALTY")
     updatePenalty(sheet, RANGE_NAME_PENALTY, score, submitTime)
-  print("{} - {} - {}, score is {} at timestamp {}".format(student, problem, RANGE_NAME, score, submitTime))
+  print("          {} - {} - {}, score is {} at timestamp {}".format(student, problem, RANGE_NAME, score, submitTime))

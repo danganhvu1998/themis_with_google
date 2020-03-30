@@ -33,13 +33,14 @@ LOG_FOLDER_AT = FILE_OUT_AT + CONFIG[ "LOG_FOLDER_AT" ] #"LOG_FOLDER_AT": "Logs/
 
 
 
-def main():
+def main(credentialsFile, tokenFile):
+    print("Using", credentialsFile)
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
+    if os.path.exists(tokenFile):
+        with open(tokenFile, 'rb') as token:
             creds = pickle.load(token)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
@@ -47,10 +48,10 @@ def main():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
+                credentialsFile, SCOPES)
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
-        with open('token.pickle', 'wb') as token:
+        with open(tokenFile, 'wb') as token:
             pickle.dump(creds, token)
 
     service = build('sheets', 'v4', credentials=creds)
@@ -72,7 +73,7 @@ def main():
         body=body
     ).execute()
 
-    while(1):
+    for i in range(5):
         try:
             paths = sorted(Path("./contestants/Logs/").iterdir(), key=os.path.getmtime)
         except:
@@ -81,6 +82,7 @@ def main():
         for path in paths:
             path = str(path)
             if not path.endswith(".log"): continue
+            print("     Loading", path)
             fp = open(path, "r", encoding="utf8");
             firstLine = fp.readline().strip()
             fp.close()
@@ -94,11 +96,17 @@ def main():
                 score = 0
             SFunc.updateScore(sheet, studentName, problemCode, score, submitTime)
             time.sleep(4)
-            if not CONFIG["IS_DEV_MODE"]:
-                os.rename(path, path+".done")
+            # if not CONFIG["IS_DEV_MODE"]:
+                # os.rename(path, path+".done")
+            print("     Done Loading", path)
         if CONFIG["IS_DEV_MODE"]: break
+    time.sleep(5)
 
 if __name__ == '__main__':
     while(1):
-        try: main()
-        except: time.sleep(50)
+        try: main('credentials1.json', "token1.pickle")
+        except: time.sleep(5)
+        try: main('credentials.json', "token.pickle")
+        except: time.sleep(5)
+        try: main('credentials2.json', "token2.pickle")
+        except: time.sleep(5)
