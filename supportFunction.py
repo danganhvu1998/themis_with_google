@@ -32,18 +32,16 @@ def writeToFile(rowValue, dateAndTime):
   FILE_OUT_AT = CONFIG[ "FILE_OUT_AT" ]
   if not os.path.exists(FILE_OUT_AT): os.makedirs(FILE_OUT_AT)
   
-
   # PRINT
   timestamp = time.mktime(time.strptime(dateAndTime, '%m/%d/%Y %H:%M:%S'))
   timestamp = int(timestamp)
-  studentName = STUDENTS.get(rowValue[SECRET_CODE_COL], "__"+rowValue[SECRET_CODE_COL]+"__")
+  studentName = STUDENTS.get(rowValue[SECRET_CODE_COL], "_NOT_VALID_CONTESTANT_")
   problemName = rowValue[PROBLEM_CODE_COL]
   fileName = "{}{}[{}][{}].{}".format(FILE_OUT_AT, timestamp, studentName, problemName, FILE_TYPE)
   code = rowValue[ CODE_COL ]
   fp = open(fileName, "w")
   fp.write( code )
   fp.close()
-  print("Write file id:", id)
   return timestamp
 
 def markDone(sheet, dateAndTime, row):

@@ -17,7 +17,7 @@ STUDENTS = DATA[ "students" ]
 CONFIG = DATA[ "config" ]
 
 # UPDATE SUBMISSION
-START_ROW = 2
+start_row = 2
 SECRET_CODE_COL = CONFIG[ "SECRET_CODE_COL" ]
 PROBLEM_CODE_COL = CONFIG[ "PROBLEM_CODE_COL" ]
 CODE_COL = CONFIG[ "CODE_COL" ]
@@ -30,7 +30,7 @@ SHEET_INPUT_ID = CONFIG[ 'SHEET_INPUT_ID' ]
 SHEET_OUTPUT_ID = CONFIG[ 'SHEET_OUTPUT_ID' ]
 
 def main(credentialsFile, tokenFile):
-    global START_ROW
+    global start_row
     print("Using", credentialsFile)
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
@@ -58,26 +58,27 @@ def main(credentialsFile, tokenFile):
 
     
 
-    currRow = START_ROW
+    currRow = start_row
     for i in range(10):
         print("     Cheking Row:", currRow)
         try:
             rowValues = SFunc.getRow(sheet, currRow)[0]
         except:
-            print("Waiting {} seconds".format(RELOAD_AFTER_SEC))
+            print("     Found Nothing. Waiting for {} seconds".format(RELOAD_AFTER_SEC))
             time.sleep(RELOAD_AFTER_SEC)
-            print("Updating ...")
+            print("     Back to Updating ...")
             continue
         if not rowValues[0].isdigit():
             timestamp = SFunc.writeToFile(rowValues, rowValues[0])
             if timestamp: # Write Successful 
-
                 print("         -> Writed to file", timestamp)
                 SFunc.markDone(sheet, timestamp, currRow)
+            else:
+                print("         -> Not a valid contestants", timestamp)
         else:
             print("         -> Updated")
         currRow+=1
-        START_ROW = currRow
+        start_row = currRow
 
 if __name__ == '__main__':
     while(1):
