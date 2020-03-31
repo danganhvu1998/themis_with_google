@@ -78,10 +78,10 @@ def getRangeName(sheet, student, problem):
   if found == 0:
     writeRow = len(values) + 1
   # REWRITE
-  body = {
-    'values': [[student]]
-  }
   if found == 0:
+    body = {
+      'values': [[student]]
+    }
     RANGE_NAME = "{}!A{}:A{}".format(SHEET_OUTPUT_NAME, writeRow, writeRow)
     result = sheet.values().update(
       spreadsheetId=SHEET_OUTPUT_ID,
@@ -105,10 +105,10 @@ def getRangeName(sheet, student, problem):
     writeCol = len( values[0] ) + 1
   writeCol = chr(writeCol-1+ord('A'))
   # REWRITE
-  body = {
-    'values': [[problem]]
-  }
   if found == 0:
+    body = {
+      'values': [[problem]]
+    }
     RANGE_NAME = "{}!{}1:{}1".format(SHEET_OUTPUT_NAME, writeCol, writeCol)
     result = sheet.values().update(
       spreadsheetId=SHEET_OUTPUT_ID,
@@ -153,12 +153,10 @@ def updateScore(sheet, student, problem, score, submitTime):
   except:
     currScore = 0
   if CONTEST_MODE == "ACM":
-    if currScore <= 0:
-      currScore -= 1
-      if score == 10: 
-        score = -currScore
-        isUpdatePenaltyNeeded = 1
-      else: score = currScore
+    if currScore <= 0: currScore-=1 # one more submission
+    if score == 10 and currScore<0: # not yet AC and now AC
+      score = -currScore
+      isUpdatePenaltyNeeded = 1
     else: score = currScore
   else:
     score = max(currScore, score)

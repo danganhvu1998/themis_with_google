@@ -59,13 +59,13 @@ def main(credentialsFile, tokenFile):
     # Call the Sheets API
     sheet = service.spreadsheets()
 
-    # Write Col
+    # INIT SHEET
     if(CONTEST_MODE == "ACM"):
         RANGE_NAME = SHEET_OUTPUT_NAME+"!A1:B1"
-        body = {'values': [["Contestant", "Penalty"]]}
+        body = {'values': [["CONTESTANTS", "PENALTY"]]}
     else:
         RANGE_NAME = SHEET_OUTPUT_NAME+"!A1:A1"
-        body = {'values': [["Contestant"]]}
+        body = {'values': [["CONTESTANTS"]]}
     sheet.values().update(
         spreadsheetId=SHEET_OUTPUT_ID,
         range=RANGE_NAME,
@@ -95,12 +95,9 @@ def main(credentialsFile, tokenFile):
             except:
                 score = 0
             SFunc.updateScore(sheet, studentName, problemCode, score, submitTime)
-            time.sleep(4)
-            if not CONFIG["IS_DEV_MODE"]:
-                os.rename(path, path+".done")
+            if not CONFIG["IS_DEV_MODE"]: os.rename(path, path+".done")
             print("     Done Loading", path)
-        if CONFIG["IS_DEV_MODE"]: break
-    time.sleep(5)
+        time.sleep(5)
 
 if __name__ == '__main__':
     while(1):
