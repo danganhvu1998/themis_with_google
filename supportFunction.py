@@ -125,7 +125,9 @@ def getRangeName(sheet, student, problem):
 def updatePenalty(sheet, RANGE_NAME, score, submitTime):
   SHEET_OUTPUT_ID = Config.infomationTaker("SHEET_OUTPUT_ID")
   WRONG_SUBMISSION_PENALTY = Config.infomationTaker("WRONG_SUBMISSION_PENALTY")
-  START_TIMESTAMP = Config.infomationTaker("START_TIMESTAMP")
+  START_TIME = Config.infomationTaker("START_TIME")
+  timestamp = time.mktime(time.strptime(START_TIME, '%m/%d/%Y %H:%M:%S'))
+  START_TIMESTAMP = int(timestamp)
   try:
     result = sheet.values().get(spreadsheetId=SHEET_OUTPUT_ID, range=RANGE_NAME).execute()
     currPenalty = float(result.get('values', [])[0][0])
