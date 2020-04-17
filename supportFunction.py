@@ -35,7 +35,8 @@ def writeToFile(rowValue, dateAndTime):
   # PRINT
   timestamp = time.mktime(time.strptime(dateAndTime, '%m/%d/%Y %H:%M:%S'))
   timestamp = int(timestamp)
-  studentName = STUDENTS.get(rowValue[SECRET_CODE_COL], "_NOT_VALID_CONTESTANT_")
+  studentName = STUDENTS.get(rowValue[SECRET_CODE_COL], None)
+  if( studentName==None ): return timestamp
   problemName = rowValue[PROBLEM_CODE_COL]
   fileName = "{}{}[{}][{}].{}".format(FILE_OUT_AT, timestamp, studentName, problemName, FILE_TYPE)
   code = rowValue[ CODE_COL ]
