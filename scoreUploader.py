@@ -86,6 +86,7 @@ def main(credentialsFile, tokenFile):
             fp = open(path, "r", encoding="utf8");
             firstLine = fp.readline().strip()
             fp.close()
+            os.rename(path, path+".done")
             info = re.findall("[.a-zA-Z0-9_]+", firstLine)
             studentName = info[0].strip().upper()
             problemCode = info[1].strip().upper()
@@ -95,15 +96,20 @@ def main(credentialsFile, tokenFile):
             except:
                 score = 0
             SFunc.updateScore(sheet, studentName, problemCode, score, submitTime)
-            if not CONFIG["IS_DEV_MODE"]: os.rename(path, path+".done")
             print("     Done Loading", path)
         time.sleep(5)
 
 if __name__ == '__main__':
     while(1):
         try: main('credentials1.json', "token1.pickle")
-        except: time.sleep(5)
+        except: 
+            print("Something goes wrong. Reloaded.")
+            time.sleep(5)
         try: main('credentials.json', "token.pickle")
-        except: time.sleep(5)
+        except: 
+            print("Something goes wrong. Reloaded.")
+            time.sleep(5)
         try: main('credentials2.json', "token2.pickle")
-        except: time.sleep(5)
+        except: 
+            print("Something goes wrong. Reloaded.")
+            time.sleep(5)
