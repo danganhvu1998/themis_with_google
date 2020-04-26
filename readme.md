@@ -9,7 +9,8 @@
 + Google API
   + Truy cập: https://developers.google.com/sheets/api/quickstart/python
   + Click nút màu xanh ghi "Enable the Google Sheets API"
-  + Download credentials.json file, copy vào cùng folder với ```codeLoader.py```
+  + Download `credentials.json` file, copy vào cùng folder với ```codeLoader.py```
+    + Có thể sử dụng 2 account khác để download `credentials.json`, lưu ở tên `credentials1.json` và `credentials2.json`. Như vậy sẽ có 300 requests mỗi 100s
 
 ## Tùy chỉnh trước khi chạy
 
@@ -18,6 +19,9 @@
   + ```SHEET_INPUT_NAME```: chứa tên của sheet lưu câu trả lời của học sinh
   + ```SHEET_OUTPUT_ID```: chứa ID của sheet thể hiện bảng điểm
   + ```SHEET_OUTPUT_NAME```: chứa tên của sheet lưu thể hiện bảng điểm
+  + ```CONTEST_MODE```: ACM hoặc IOI 
+  + ```START_TIME```: Thời gian bắt đầu contest, để tính penalty trong ACM
+  + ```WRONG_SUBMISSION_PENALTY```: Thời gian phạt mỗi lần submit sai
 + ```students.json```: Chứ mã bí mật nào ứng với mã học sinh. Mã học sinh không nên viết tiếng việt, hay có dấu cách.
 
 ## Chạy
