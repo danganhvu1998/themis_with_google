@@ -37,3 +37,4 @@
 
 + ```codeLoader.py``` và ```scoreUploader.py``` là 2 file riêng biệt, ko ảnh hưởng đến nhau. Và phải chạy cả 2 file trong quá trình chấm
 + Nếu 1 trong 2 file ko may crash, thì chỉ cần khởi động lại. Chúng nên tiếp tục hoạt động bình thường. Trong trường hợp không thì có lẽ bạn cần tự debug. Sorry :((
++ Trong ACM mode, 1 bài được tính là AC nếu điểm số >=10. Giả sử có 28 test, có thể đặt điểm 1 test là 0.3575. Đúng 27 test được 9.6525 (Không AC), đúng 28 test được 10.01 (AC)

@@ -157,7 +157,7 @@ def updateScore(sheet, student, problem, score, submitTime):
     currScore = 0
   if CONTEST_MODE == "ACM":
     if currScore <= 0: currScore-=1 # one more submission
-    if score == 10 and currScore<0: # not yet AC and now AC
+    if score >= 10 and currScore<0: # not yet AC and now AC
       score = -currScore
       isUpdatePenaltyNeeded = 1
     else: score = currScore
