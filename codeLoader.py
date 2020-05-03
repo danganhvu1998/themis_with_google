@@ -7,6 +7,7 @@ from google.auth.transport.requests import Request
 import configReader as Config
 import supportFunction as SFunc
 import time
+from datetime import datetime 
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
@@ -60,7 +61,7 @@ def main(credentialsFile, tokenFile):
 
     currRow = start_row
     for i in range(10):
-        print("     Cheking Row:", currRow)
+        print("     Cheking Row:", currRow, "at", str(datetime.now()))
         try:
             rowValues = SFunc.getRow(sheet, currRow)[0]
         except:
