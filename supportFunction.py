@@ -146,6 +146,10 @@ def updatePenalty(sheet, RANGE_NAME, score, submitTime):
   print("          RANGE_NAME: {} - Score: {} - Penalty: {}".format(RANGE_NAME, score, currPenalty))
 
 def updateScore(sheet, student, problem, score, submitTime):
+  # Log to file
+  f= open("contest_log.txt","a")
+  f.write("Name: {}, Problems: {}, Score: {}, Time Stamp: {}".format(student, problem, score, submitTime))
+  f.close()
   SHEET_OUTPUT_ID = Config.infomationTaker("SHEET_OUTPUT_ID")
   CONTEST_MODE = Config.infomationTaker("CONTEST_MODE")
   RANGE_NAME = getRangeName(sheet, student, problem)
