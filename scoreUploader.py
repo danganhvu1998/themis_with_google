@@ -87,16 +87,19 @@ def main(credentialsFile, tokenFile):
             firstLine = fp.readline().strip()
             fp.close()
             os.rename(path, path+".done")
-            info = re.findall("[.a-zA-Z0-9_]+", firstLine)
-            studentName = info[0].strip().upper()
-            problemCode = info[1].strip().upper()
-            submitTime = int(re.findall("[0-9]+", path)[0])
             try:
-                score = float(info[2])
+                info = re.findall("[.a-zA-Z0-9_]+", firstLine)
+                studentName = info[0].strip().upper()
+                problemCode = info[1].strip().upper()
+                submitTime = int(re.findall("[0-9]+", path)[0])
+                try:
+                    score = float(info[2])
+                except:
+                    score = 0
+                SFunc.updateScore(sheet, studentName, problemCode, score, submitTime)
+                print("     Done Loading", path)
             except:
-                score = 0
-            SFunc.updateScore(sheet, studentName, problemCode, score, submitTime)
-            print("     Done Loading", path)
+                print("     Error when loading {}. Drop".format(path))
         time.sleep(5)
 
 if __name__ == '__main__':
