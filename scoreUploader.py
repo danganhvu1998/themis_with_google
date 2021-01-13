@@ -10,6 +10,7 @@ import time
 import os
 from pathlib import Path
 import re
+import sys
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
@@ -100,6 +101,8 @@ def main(credentialsFile, tokenFile):
                 print("     Done Loading", path)
             except:
                 print("     Error when loading {}. Drop".format(path))
+                e = sys.exc_info()[0]
+                print("REeson:", e)
         time.sleep(5)
 
 if __name__ == '__main__':
