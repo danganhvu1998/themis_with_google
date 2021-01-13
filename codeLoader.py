@@ -8,6 +8,7 @@ import configReader as Config
 import supportFunction as SFunc
 import time
 from datetime import datetime 
+import sys
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
@@ -84,8 +85,17 @@ def main(credentialsFile, tokenFile):
 if __name__ == '__main__':
     while(1):
         try: main('credentials2.json', "token2.pickle")
-        except: time.sleep(5)
+        except: 
+            e = sys.exc_info()[0]
+            print("Reason:", e)
+            time.sleep(5)
         try: main('credentials1.json', "token1.pickle")
-        except: time.sleep(5)
+        except:
+            e = sys.exc_info()[0]
+            print("Reason:", e)
+            time.sleep(5)
         try: main('credentials.json', "token.pickle")
-        except: time.sleep(5)
+        except:
+            e = sys.exc_info()[0]
+            print("Reason:", e)
+            time.sleep(5)
