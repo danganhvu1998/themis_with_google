@@ -97,12 +97,13 @@ def main(credentialsFile, tokenFile):
                     score = float(info[2])
                 except:
                     score = 0
+                print("     Try to upload result: Student: {}; Problem: {}; Score: {}; Submit Time: {}".format(studentName, problemCode, score, submitTime))
                 SFunc.updateScore(sheet, studentName, problemCode, score, submitTime)
                 print("     Done Loading", path)
             except:
                 print("     Error when loading {}. Drop".format(path))
                 e = sys.exc_info()[0]
-                print("Reason:", e)
+                print("     Error Reason:", e)
         time.sleep(5)
 
 if __name__ == '__main__':
