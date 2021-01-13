@@ -122,6 +122,7 @@ def getRangeName(sheet, student, problem):
       'values': [[problem]]
     }
     RANGE_NAME = "{}!{}1:{}1".format(SHEET_OUTPUT_NAME, writeCol, writeCol)
+    print('RANGE NAME 1', RANGE_NAME)
     result = sheet.values().update(
       spreadsheetId=SHEET_OUTPUT_ID,
       range=RANGE_NAME,
@@ -131,6 +132,7 @@ def getRangeName(sheet, student, problem):
   
   # Get RANGE_NAME
   RANGE_NAME = "{}!{}{}:{}{}".format(SHEET_OUTPUT_NAME, writeCol, writeRow, writeCol, writeRow)
+  print('RANGE NAME 2', RANGE_NAME)
   return RANGE_NAME
 
 def updatePenalty(sheet, RANGE_NAME, score, submitTime):
