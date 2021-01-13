@@ -102,7 +102,7 @@ def main(credentialsFile, tokenFile):
             except:
                 print("     Error when loading {}. Drop".format(path))
                 e = sys.exc_info()[0]
-                print("REeson:", e)
+                print("Reason:", e)
         time.sleep(5)
 
 if __name__ == '__main__':
